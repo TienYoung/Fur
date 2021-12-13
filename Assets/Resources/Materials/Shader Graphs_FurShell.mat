@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs_FurShell
+  m_Shader: {fileID: -6465566751694194690, guid: d3099af61d8b6da45b812b078e7871f1, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - FurPattern:
+        m_Texture: {fileID: 2800000, guid: 109c1da3066273948917ad4ed96a79e6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - FurTex:
+        m_Texture: {fileID: 2800000, guid: 710c44f01e76a27438e3423a9b8e5dd8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Height:
+        m_Texture: {fileID: 2800000, guid: c654288d1df729247a52abe6e14c4b68, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Noise:
+        m_Texture: {fileID: 2800000, guid: ca210f98877cf314ebccc7b54f42e7fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Occlusion:
+        m_Texture: {fileID: 2800000, guid: 9c8b24aded53d5a4d8fdf25e88ea1fbb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Roughness:
+        m_Texture: {fileID: 2800000, guid: e193e3125ab81b84d96c2808d30817b9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Diffuse:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - AO: 0.532
+    - AlphaEXp: 0.67
+    - AlphaEdge: 1
+    - AlphaThreshold: 0.876
+    - Bias: 0
+    - Distor: 0
+    - F: 0
+    - FurPatternScale: 100
+    - Length: 0.123
+    - RimClip: -5
+    - RimIntensity: 0.052
+    - RimLight: 19.7
+    - RimPower: 32
+    - Roughness: 1
+    - Theshold: 0
+    - Thickness: 0
+    - Transparent: -0.37
+    - Upper: 0.065
+    - W: 0
+    - _Float: 2
+    - _Offset: 1
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - tempA: 0.84
+    - x: 1.52
+    m_Colors:
+    - FurColor: {r: 1, g: 1, b: 1, a: 0}
+    - LightDir: {r: 0, g: 1, b: 0, a: 0}
+    - ScatterColor: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 0}
+  m_BuildTextureStacks: []
+--- !u!114 &3364215601597331002
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
