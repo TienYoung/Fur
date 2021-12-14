@@ -11,7 +11,7 @@ public class GPUFur : ScriptableRendererFeature
         public SkinnedMeshRenderer Renderer;
         public GraphicsBuffer VertexBuffer;
         public GraphicsBuffer IndexBuffer;
-        public int VertexCount;
+        private int m_IndexCount;
         public int InstanceCount;
         public MaterialPropertyBlock MatPropBlk = new MaterialPropertyBlock();
 
@@ -25,7 +25,19 @@ public class GPUFur : ScriptableRendererFeature
         {
             VertexBuffer = Renderer.GetVertexBuffer();
             IndexBuffer = Renderer.sharedMesh.GetIndexBuffer();
+            m_IndexCount = IndexBuffer.count;
+            Matrix = Renderer.transform.localToWorldMatrix;
             FurMat.SetBuffer("_Vertics", VertexBuffer);
+            FurMat.enableInstancing = true;
+
+            int layerCount = Mathf.FloorToInt(FurMat.GetFloat("_LayerCount"));
+            float[] layerNums = new float[layerCount];
+            for (int i = 0; i < layerCount; ++i)
+            {
+                layerNums[i] = i;
+            }
+            MatPropBlk.SetFloatArray("_LayerNums", layerNums);
+            InstanceCount = layerCount;
         }
 
         // Here you can implement the rendering logic.
@@ -39,7 +51,7 @@ public class GPUFur : ScriptableRendererFeature
             cmd.Clear();
 
 
-            cmd.DrawProcedural(IndexBuffer, Matrix, FurMat, 1, MeshTopology.Triangles, VertexCount, InstanceCount, MatPropBlk);
+            cmd.DrawProcedural(IndexBuffer, Matrix, FurMat, 1, MeshTopology.Triangles, m_IndexCount, InstanceCount, MatPropBlk);
 
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -48,8 +60,9 @@ public class GPUFur : ScriptableRendererFeature
         // Cleanup any allocated resources that were created during the execution of this render pass.
         public override void OnCameraCleanup(CommandBuffer cmd)
         {
-            VertexBuffer.Release();
-            IndexBuffer.Release();
+            VertexBuffer?.Dispose();
+            IndexBuffer?.Dispose();
+            //FurMat.enableInstancing = false;
         }
     }
 
@@ -92,16 +105,9 @@ public class GPUFur : ScriptableRendererFeature
 
         m_GPUFurPass.FurMat = material;
 
-        int layerCount = Mathf.FloorToInt(material.GetFloat("_LayerCount"));
-        float[] layerNums = new float[layerCount];
-        for (int i = 0; i < layerCount; ++i)
-        {
-            layerNums[i] = i;
-        }
-        m_GPUFurPass.MatPropBlk.SetFloatArray("_LayerNums", layerNums);
+
 
         //m_GPUFurPass.IndexBuffer = m_IndexBuffer;
-        m_GPUFurPass.Matrix = furObject.transform.localToWorldMatrix;
         m_GPUFurPass.Renderer = skinnedMeshRenderer;
     }
 

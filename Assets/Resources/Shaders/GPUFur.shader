@@ -69,7 +69,8 @@ Shader "Fur/GPU Fur"
             struct AttributesShell
             { 
                 uint vertexID : SV_VertexID;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                uint instanceID : SV_InstanceID;
+                //UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             float3 GetVertexData_Position(ByteAddressBuffer vBuffer, uint vid)
@@ -113,8 +114,8 @@ Shader "Fur/GPU Fur"
                 uint layerNums = UNITY_ACCESS_INSTANCED_PROP(FurPerMaterial, _LayerNums);
                 float furLength = UNITY_ACCESS_INSTANCED_PROP(FurPerMaterial, _FurLength);
 
-                float layer = layerNums / layerCount;
-                positionOS.xyz += normalOS * 1 * 1;
+                float layer = (float)input.instanceID / layerCount;
+                positionOS.xyz += normalOS * _FurLength * 1;
 
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(positionOS.xyz);
 
