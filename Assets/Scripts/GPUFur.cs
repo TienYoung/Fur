@@ -58,11 +58,18 @@ public class GPUFur : ScriptableRendererFeature
         SkinnedMeshRenderer skinnedMeshRenderer = furObject.GetComponent<SkinnedMeshRenderer>();
         GraphicsBuffer vertexBuffer = skinnedMeshRenderer.GetVertexBuffer();
         GraphicsBuffer indexBuffer = skinnedMeshRenderer.sharedMesh.GetIndexBuffer();
-        int positionStreamIndex = skinnedMeshRenderer.sharedMesh.GetVertexAttributeStream(VertexAttribute.Position);
+        int stride = skinnedMeshRenderer.sharedMesh.GetVertexBufferStride(0);
         int positionOffset = skinnedMeshRenderer.sharedMesh.GetVertexAttributeOffset(VertexAttribute.Position);
+        int normalOffset = skinnedMeshRenderer.sharedMesh.GetVertexAttributeOffset(VertexAttribute.Normal);
+        int tangentOffset = skinnedMeshRenderer.sharedMesh.GetVertexAttributeOffset(VertexAttribute.Tangent);
 
         Material material = CoreUtils.CreateEngineMaterial("Fur/GPU Fur");
         material.SetBuffer("_Vertics", vertexBuffer);
+        material.SetInteger("_Stride", stride);
+        material.SetInteger("_PosOffset", positionOffset);
+        material.SetInteger("_NorOffset", normalOffset);
+        material.SetInteger("_TanOffset", tangentOffset);
+
         m_GPUFurPass.FurMat = material;
 
         int layerCount = material.GetInt("_LayerCount");
@@ -72,6 +79,8 @@ public class GPUFur : ScriptableRendererFeature
             layerNums[i] = i;
         }
         m_GPUFurPass.MatPropBlk.SetFloatArray("_LayerNums", layerNums);
+
+        m_GPUFurPass.IndexBuffer = indexBuffer;
     }
 
     // Here you can inject one or multiple render passes in the renderer.

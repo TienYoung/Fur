@@ -1,0 +1,9 @@
+Low Poly Cat - by LadyMito
+
+Animation List:
+
+	- idle 
+	- sit
+	- sitting
+	- miau
+	- walk		
