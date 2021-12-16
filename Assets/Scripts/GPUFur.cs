@@ -6,7 +6,7 @@ public class GPUFur : ScriptableRendererFeature
 {
     class GPUFurRenderPass : ScriptableRenderPass
     {
-        public SkinnedMeshRenderer Renderer;
+        public SkinnedMeshRenderer SMRenderer;
 
         private Material m_FurMat;
         private Matrix4x4 m_Matrix;
@@ -17,6 +17,7 @@ public class GPUFur : ScriptableRendererFeature
         private int m_IndexCount;
         private int m_InstanceCount;
 
+        bool setted = false;
         // This method is called before executing the render pass.
         // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
         // When empty this render pass will render to the active camera render target.
@@ -24,20 +25,24 @@ public class GPUFur : ScriptableRendererFeature
         // The render pipeline will ensure target setup and clearing happens in a performant manner.
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            m_IndexBuffer = Renderer.sharedMesh.GetIndexBuffer();
+            m_DeformedDataBuffer = SMRenderer.GetVertexBuffer();
+            SMRenderer.sharedMesh.vertexBufferTarget |= GraphicsBuffer.Target.Raw;
+            int _uvStreamID = SMRenderer.sharedMesh.GetVertexAttributeStream(VertexAttribute.TexCoord0);
+            m_StaticDataBuffer = SMRenderer.sharedMesh.GetVertexBuffer(_uvStreamID);
+            //m_SkinningDataBuffer = Renderer.sharedMesh.GetVertexBuffer(Renderer.sharedMesh.GetVertexAttributeStream(VertexAttribute.BlendWeight));
+            
+            m_IndexBuffer = SMRenderer.sharedMesh.GetIndexBuffer();
             m_IndexCount = m_IndexBuffer.count;
 
-            m_DeformedDataBuffer = Renderer.GetVertexBuffer();
-            Renderer.sharedMesh.vertexBufferTarget |= GraphicsBuffer.Target.Raw;
-            m_StaticDataBuffer = Renderer.sharedMesh.GetVertexBuffer(Renderer.sharedMesh.GetVertexAttributeStream(VertexAttribute.TexCoord0));
-            //m_SkinningDataBuffer = Renderer.sharedMesh.GetVertexBuffer(Renderer.sharedMesh.GetVertexAttributeStream(VertexAttribute.BlendWeight));
 
-            m_Matrix = Renderer.transform.parent.localToWorldMatrix;
-            m_FurMat = Renderer.sharedMaterial;
+            m_FurMat = SMRenderer.sharedMaterial;
             m_FurMat.SetBuffer("_DeformedData", m_DeformedDataBuffer);
             m_FurMat.SetBuffer("_StaticData", m_StaticDataBuffer);
+            
 
+            m_Matrix = SMRenderer.transform.parent.Find("ch_bone").Find("Bip001").Find("Bip001 Pelvis").localToWorldMatrix;
             m_InstanceCount = Mathf.FloorToInt(m_FurMat.GetFloat("_LayerCount"));
+
         }
 
         // Here you can implement the rendering logic.
@@ -49,7 +54,6 @@ public class GPUFur : ScriptableRendererFeature
             CommandBuffer cmd = CommandBufferPool.Get();
             context.ExecuteCommandBuffer(cmd);
             cmd.Clear();
-
 
             cmd.DrawProcedural(m_IndexBuffer, m_Matrix, m_FurMat, 1, MeshTopology.Triangles, m_IndexCount, m_InstanceCount);
 
@@ -73,7 +77,7 @@ public class GPUFur : ScriptableRendererFeature
     /// <inheritdoc/>
     public override void Create()
     {
-        var furObject = GameObject.Find("cat");
+        var furObject = GameObject.Find("Wolf_Generic");
         if (furObject == null)
         {
             Debug.LogWarning("Not found Fur !!!!!!!!!!");
@@ -87,7 +91,7 @@ public class GPUFur : ScriptableRendererFeature
         m_GPUFurPass.renderPassEvent = RenderPassEvent.BeforeRenderingTransparents;
 
         //m_GPUFurPass.IndexBuffer = m_IndexBuffer;
-        m_GPUFurPass.Renderer = skinnedMeshRenderer;
+        m_GPUFurPass.SMRenderer = skinnedMeshRenderer;
     }
 
     // Here you can inject one or multiple render passes in the renderer.

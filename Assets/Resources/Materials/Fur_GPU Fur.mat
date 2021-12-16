@@ -20,20 +20,20 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: f88843fb1a12c034ea29c4fdba25c5bd, type: 3}
+        m_Texture: {fileID: 2800000, guid: efa8d16203a7f1e47ad23f39eab12a3a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FurPatternMap:
         m_Texture: {fileID: 2800000, guid: 57aeaf28412f79349984e2cc63492a24, type: 3}
-        m_Scale: {x: 10, y: 10}
+        m_Scale: {x: 5, y: 8}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FurLength: 0.07
-    - _Gravity: 0.394
+    - _FurLength: 0.194
+    - _Gravity: 0.641
     - _LayerCount: 8
     - _Thickness: 0
-    - _Top: 0.873
+    - _Top: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

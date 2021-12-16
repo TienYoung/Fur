@@ -5,7 +5,7 @@ Shader "Fur/GPU Fur"
         [MainTexture] _BaseMap("Albedo", 2D) = "white" {}
         [MainColor] _BaseColor("Color", Color) = (1,1,1,1)
 
-        [IntRange] _LayerCount("Layer Count", Range(0, 128)) = 8
+        [IntRange] _LayerCount("Layer Count", Range(0, 256)) = 8
         _FurLength("Fur Length", Range(0.0, 1.0)) = 1
         _FurPatternMap("Fur Pattern", 2D) = "white" {}
         _Gravity("Gravity", Range(0.0, 1.0)) = 0
@@ -50,6 +50,8 @@ Shader "Fur/GPU Fur"
                 #pragma exclude_renderers gles gles3 glcore
                 #pragma target 4.5
 
+             #pragma multi_compile _ _ADDITIONAL_LIGHTS
+
             //#pragma multi_compile_instancing
             //#pragma instancing_options procedural:ShellInstancingSetup
             #pragma vertex ShellPassVertex
@@ -69,14 +71,6 @@ Shader "Fur/GPU Fur"
                 TEXTURE2D(_FurPatternMap);        SAMPLER(sampler_FurPatternMap);
                 
 
-            ByteAddressBuffer _DeformedData;
-            ByteAddressBuffer _StaticData;
-
-            struct AttributesShell
-            { 
-                uint vertexID : SV_VertexID;
-                uint instanceID : SV_InstanceID;
-            };
 
             struct VaryingsShell
             {
@@ -87,6 +81,15 @@ Shader "Fur/GPU Fur"
                 half4 tangentWS                 : TEXCOORD2;    // xyz: tangent, w: sign
                 float3 viewDirWS                : TEXCOORD3;
                 half layer                      : TEXCOORD4;
+            };
+
+            ByteAddressBuffer _DeformedData;
+            ByteAddressBuffer _StaticData;
+
+            struct AttributesShell
+            { 
+                uint vertexID : SV_VertexID;
+                uint instanceID : SV_InstanceID;
             };
 
             float3 GetDeformedData_Position(ByteAddressBuffer vBuffer, uint vid)
@@ -110,17 +113,10 @@ Shader "Fur/GPU Fur"
                 return data;
             }
 
-            //float4 GetStaticData_Color(ByteAddressBuffer vBuffer, uint vid)
-            //{
-            //    int vidx = vid * 12;
-            //    float data = asfloat(vBuffer.Load4(vidx));
-            //    return data;
-            //}
-
             float2 GetStaticData_TexCoord0(ByteAddressBuffer vBuffer, uint vid)
             {
-                int vidx = vid * 12;
-                float2 data = asfloat(vBuffer.Load2(vidx + 4));
+                int vidx = vid * 8;
+                float2 data = asfloat(vBuffer.Load2(vidx));
                 return data;
             }
 
@@ -136,7 +132,7 @@ Shader "Fur/GPU Fur"
 
 
                 float layer = input.instanceID / _LayerCount;
-                positionOS.xyz += (normalOS + _Gravity * float3(0, 0, -1)) * _FurLength * 0.1 * layer;
+                positionOS.xyz += (normalOS + _Gravity * float3(0, 1, 0) * layer * layer) * _FurLength * 0.1 * layer;
 
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(positionOS);
                 output.positionCS = vertexInput.positionCS;
@@ -190,6 +186,9 @@ Shader "Fur/GPU Fur"
                 half layer = input.layer * input.layer + 0.04;
                 fur -= lerp(_Thickness, _Top, layer);
                 color.rgb *= layer;
+                //clip(fur);
+
+
                 color.a = saturate(fur);
 
                 return color;
