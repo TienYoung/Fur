@@ -79,7 +79,7 @@ Shader "Fur/GPU Fur"
                 float2 uv                       : TEXCOORD0;
                 half3 normalWS                  : TEXCOORD1;
                 half4 tangentWS                 : TEXCOORD2;    // xyz: tangent, w: sign
-                float3 viewDirWS                : TEXCOORD3;
+                float3 positionWS               : TEXCOORD3;
                 half layer                      : TEXCOORD4;
             };
 
@@ -149,7 +149,7 @@ Shader "Fur/GPU Fur"
                 real sign = tangentOS.w * GetOddNegativeScale();
                 output.tangentWS = half4(normalInput.tangentWS.xyz, sign);
 
-                output.viewDirWS = GetWorldSpaceNormalizeViewDir(vertexInput.positionWS);
+                output.positionWS = vertexInput.positionWS;
 
                 output.layer = layer;
 
@@ -173,7 +173,8 @@ Shader "Fur/GPU Fur"
                 
                 inputData.normalWS = TransformTangentToWorld(surfaceData.normalTS, tangentToWorld);
                 inputData.normalWS = NormalizeNormalPerPixel(inputData.normalWS);
-                inputData.viewDirectionWS = input.viewDirWS;
+                inputData.viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
+                inputData.positionWS = input.positionWS;
 
                 SETUP_DEBUG_TEXTURE_DATA(inputData, baseUV, _BaseMap);
 

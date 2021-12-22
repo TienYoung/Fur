@@ -17,7 +17,6 @@ public class GPUFur : ScriptableRendererFeature
         private int m_IndexCount;
         private int m_InstanceCount;
 
-        bool setted = false;
         // This method is called before executing the render pass.
         // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
         // When empty this render pass will render to the active camera render target.
