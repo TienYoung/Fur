@@ -1,5 +1,5 @@
 # Fur
  Shell-based fur unity implementations.
 
-## Demo
-![GPU Skinned Fur Instance](./demo.mp4)
+https://github.com/user-attachments/assets/45dbbd15-5790-4718-b412-4fb882627726
+
