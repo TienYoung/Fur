@@ -2,4 +2,4 @@
  Shell-based fur unity implementations.
 
 ## Demo
-![GPU Skinned Fur Instance](demo.mp4)
+![GPU Skinned Fur Instance](./demo.mp4)
