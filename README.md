@@ -9,6 +9,10 @@ This Unity demo showcases an implementation of shell-based fur rendering using G
 - Fully animated characters with bone skinning  
 - Efficient rendering using Unity's `CommandBuffer.DrawProcedural` and custom shader logic
 
+## Requirements
+
+- Unity 2021.2.7f1  
+
 ## Demonstration
 
 https://github.com/user-attachments/assets/45dbbd15-5790-4718-b412-4fb882627726
@@ -18,7 +22,3 @@ https://github.com/user-attachments/assets/45dbbd15-5790-4718-b412-4fb882627726
 A detailed explanation of the technique and implementation is available on Medium:  
 👉 [GPU Skinned Fur Instance in Unity](https://medium.com/@TienYoung/gpu-skinned-fur-instance-in-unity-ccc0668b4202)
 
-## Requirements
-
-- Unity 2021.3 LTS or later  
-- Shader Model 4.5+ compatible GPU
